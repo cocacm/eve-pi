@@ -1,0 +1,18 @@
+
+ssh file added to boot flash
+wpa_supplicant added to boot flash
+apt installed update and upgrade
+changed hostname and password
+enabled SPI and I2C
+apt installed pip3
+apt installed git
+git cloned Adafruit_Python_DHT
+Adafruit-DHT built from source,
+Adafruit-DHT managed by pip3
+pip3 installed ipython3
+pip3 installed RPi.GPIO
+pip3 installed RPIO
+pip3 installed AWSIoTPythonSDK
+added shell script to /etc/rc.local
+added init.py file to root
+

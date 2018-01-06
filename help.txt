@@ -1,0 +1,52 @@
+
+here are some basic commands for navigating the pi
+firstly, ALWAYS SHUT DOWN BEFORE DISCONNECTING
+/etc/network/interfaces
+/etc/wpa_supplicant/wpa_supplicant.conf
+
+ ~$ sudo shutdown -h now
+
+*~----- SYSTEM -----~*
+
+system configuration
+~$ sudo raspi-config
+
+update raspbian packages
+~$ sudo apt-get update
+~$ sudo apt-get upgrade
+
+*~----- FILES -----~*
+
+navigating directories,
+to change directory
+~$ cd <DIRECTORY>
+to create directory
+~$ mkdir <DIRECTORY>
+to list directory contents
+~$ ls
+to move/rename file/directory
+~$ mv <FILE/PATH> <NEW FILE/NEW PATH>
+
+preview code or txt file
+~$ cat <FILENAME>
+
+use nano text editor
+CTRL+O to save file
+CTRL+X to exit file
+~$ nano <FILE.TXT/FILE.PY>
+
+*~----- PYTHON -----~*
+
+execute python file
+use CTRL+C to exit
+~$ python3 <FILE.PY>
+
+run python interpreter,
+use CTRL+D to exit
+~$ ipython3
+
+install python packages
+~$ pip3 install <PACKAGE>
+list installed python packages
+~$ pip3 list
+
