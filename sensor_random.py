@@ -30,16 +30,18 @@ date = datetime.now(tz=pytz.utc)
 now_str = date.strftime('%m/%d/%Y %H:%M:%S %Z')
 
 payload = {
-    'datetime': now_str,
-    'location': 'default',
-    'temp': 0.0,
-    'humid': 0.0,
-    'light': 0.0
+    'plant_type': {"S": 'default'},
+    'datetime': {"S": now_str},
+    'location': {"S": 'default'},
+    'temp': {"S": '0'},
+    'humid': {"S": '0'},
+    'light': {"S": '0'}
     }
 
 def rand_sensor_data():
     print('randomizing sensor data')
     for each in payload:
+        each = random.randint(1, 51)
         print('complete')
 
 try:
@@ -47,7 +49,7 @@ try:
     print(payload)
     msg = json.dumps(payload)
     print(msg)
-    myMQTTClient.Publish("thing01/data", payload, 0)
+    myMQTTClient.publish("thing01/data", msg, 0)
     sleep(5)
 except KeyboardInterrupt:
     GPIO.cleanup()
