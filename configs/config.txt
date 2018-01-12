@@ -15,4 +15,4 @@ pip3 installed RPIO
 pip3 installed AWSIoTPythonSDK
 added shell script to /etc/rc.local
 added init.py file to root
-
+pip3 installed pytz

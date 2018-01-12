@@ -1,21 +1,9 @@
-import RPi.GPIO as GPIO
-import Adafruit_DHT
 import json
 import pytz
 from time import sleep
 from datetime import date, datetime
 from random import randint
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
-
-# pin definitions
-dht_pin = 4      # BOARD 7
-prc_pin = 11     # BCM 17
-button_pin = 13  # BCM 27
-
-# pin setup
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(prc_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 # AWS IoT certificate based connection
 myMQTTClient = AWSIoTMQTTClient("123afhlss456")					#This is just an ID so that the MQTT broker can identify the client, using any random string will do.
@@ -29,47 +17,33 @@ myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 #connect and publish
 myMQTTClient.connect()
-myMQTTClient.publish("thing01/info", "connected", 0)  #topic, message, buffer
+myMQTTClient.publish("thing01/info", "connected", 0)
 
 date = datetime.now(tz=pytz.utc)
-date = date.astimezone(timezone('US/Pacific'))
+# date = date.astimezone(timezone('US/Pacific'))
 now_str = date.strftime('%m/%d/%Y %H:%M:%S %Z')
 
-# ping device for location
-location = 'Valencia, Ca'
 payload = {
     'datetime': now_str,
-    'location': location,
+    'location': 'default'
     'temp': 0.0,
     'humid': 0.0,
     'light': 0.0
     }
 
-def get_sensor_data():
-	print('getting sensor data')
-	payload['humid'], payload['temp'] = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, dht_pin)
-	payload['light'] = prc_time(prc_pin)
-    # fahr = int(temp * (9.0 / 5.0) + 32)
-	print('complete')
-
-def prc_time(pin):
-# photoresistor cell sensor data
-	light = 0
-	GPIO.setup(pin, GPIO.OUT, initial=GPIO.LOW)
-	sleep(0.1)  # 1 microsecond
-
-	GPIO.setup(pin, GPIO.IN)
-	while (GPIO.input(pin) == GPIO.LOW):
-		light += 1
-	return light
+def rand_sensor_data():
+    print('randomizing sensor data')
+    for each in payload:
+        each = randint(1, 51)
+    print('complete')
 
 try:
     rand_sensor_data()
     print(payload)
-    msg = payload.json()
+    msg = json.dumps(payload)
     print(msg)
     myMQTTClient.Publish("thing01/data", payload, 0)
     sleep(5)
 except KeyboardInterrupt:
-	GPIO.cleanup()
-	print('exiting')
+    GPIO.cleanup()
+    print('exited')
