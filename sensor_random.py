@@ -40,7 +40,7 @@ payload = {
 def rand_sensor_data():
     print('randomizing sensor data')
     for each in payload:
-    print('complete')
+        print('complete')
 
 try:
     rand_sensor_data()
