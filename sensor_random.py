@@ -6,10 +6,16 @@ from random import randint
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # AWS IoT certificate based connection
-myMQTTClient = AWSIoTMQTTClient("123afhlss456")					#This is just an ID so that the MQTT broker can identify the client, using any random string will do.
-myMQTTClient.configureEndpoint("a375a74rjdbru6.iot.us-west-2.amazonaws.com", 8883)			#this is the unique thing endpoint with the .503 certificate
+# MQQT client is an ID so that the MQTT broker can identify the client, using
+# any random string will do.
+myMQTTClient = AWSIoTMQTTClient("123afhlss456")
+# this is the unique thing endpoint with the .503 certificate
+myMQTTClient.configureEndpoint("a375a74rjdbru6.iot.us-west-2.amazonaws.com", 8883)
 # giovanni
-myMQTTClient.configureCredentials("aws-iot-device-sdk-python/deviceSDK/certs/VeriSign-Class 3-Public-Primary-Certification-Authority-G5.pem.txt", "aws-iot-device-sdk-python/deviceSDK/certs/9e6528d5bc-private.pem.key", "aws-iot-device-sdk-python/deviceSDK/certs/9e6528d5bc-certificate.pem.crt")
+myMQTTClient.configureCredentials(
+    "aws-iot-device-sdk-python/deviceSDK/certs/VeriSign-Class3-Public-Primary-Certification-Authority-G5.pem.txt",
+    "aws-iot-device-sdk-python/deviceSDK/certs/9e6528d5bc-private.pem.key",
+    "aws-iot-device-sdk-python/deviceSDK/certs/9e6528d5bc-certificate.pem.crt")
 # michael
 myMQTTClient.configureCredentials(
     "aws-iot-device-sdk-python/deviceSDK/certs/VeriSign-Class3-Public-Primary-Certification-Authority-G5.pem.txt",
@@ -22,17 +28,17 @@ myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
 myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 #connect and publish
-myMQTTClient.connect()
-myMQTTClient.publish("thing01/info", "connected", 0)
 
 date = datetime.now(tz=pytz.utc)
 # date = date.astimezone(timezone('US/Pacific'))
-now_str = date.strftime('%m/%d/%Y %H:%M:%S %Z')
+now_str = date.strftime('%Y-%d-%m %H:%M:%S %Z')
 
+# ping device for location
+location = 'Valencia, Ca'
 payload = {
-    'plant_type': 'default',
-    'datetime': now_str,
-    'location': 'default',
+    'plant_type': 'vegetable',
+    'date_time': now_str,
+    'location': location,
     'temp': 0.0,
     'humid': 0.0,
     'light': 0.0
