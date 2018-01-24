@@ -4,7 +4,6 @@ import json
 import pytz
 from time import sleep
 from datetime import date, datetime
-from random import randint
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 
 # pin definitions
