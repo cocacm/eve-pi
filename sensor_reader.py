@@ -47,11 +47,12 @@ date = date.astimezone(timezone('US/Pacific'))
 now_str = date.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 # ping device for location
-location = 'Valencia, Ca'
+# plant_type = 'vegetable'
+# location = 'Valencia, Ca'
 payload = {
-    'plant_type': 'vegetable',
+    # 'plant_type': plant_type,
     'date_time': now_str,
-    'location': location,
+    # 'location': location,
     'temp': 0.0,
     'humid': 0.0,
     'light': 0.0
