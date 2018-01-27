@@ -1,4 +1,3 @@
-
 ssh file added to boot flash
 wpa_supplicant added to boot flash
 apt installed update and upgrade
@@ -16,3 +15,6 @@ pip3 installed AWSIoTPythonSDK
 added shell script to /etc/rc.local
 added init.py file to root
 pip3 installed pytz
+added sensor_random.py for testing
+added sensor_water.py for watering
+created crontab entry

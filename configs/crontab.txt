@@ -1,0 +1,5 @@
+# run `crontab -e` then select nano as the editor
+# insert the following cron job into the editor
+
+# runs sensor_reader.py every 6 hours and logs the results
+0 */6 * * * ~/eve-pi/sensor_reader.py > cron_log.txt
