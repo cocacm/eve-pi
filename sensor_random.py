@@ -21,13 +21,16 @@ myMQTTClient.configureCredentials(
     "aws-iot-device-sdk-python/deviceSDK/certs/VeriSign-Class3-Public-Primary-Certification-Authority-G5.pem.txt",
     "aws-iot-device-sdk-python/deviceSDK/certs/24535dbd29-private.pem.key",
     "aws-iot-device-sdk-python/deviceSDK/certs/24535dbd29-certificate.pem.crt")
-#above has the path for the CA root cert, private key cert, and device cert
+# above has the path for the CA root cert, private key cert, and device cert
 myMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
 myMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
 myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
 myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
-#connect and publish
+# connect and publish
+myMQTTClint.connect()
+# callback function for AWS sub
+custom_callback = lambda client, userdata, message: message.payload
 
 date = datetime.now(tz=pytz.utc)
 # date = date.astimezone(timezone('US/Pacific'))
@@ -56,6 +59,7 @@ try:
     msg = json.dumps(payload)
     print(msg)
     myMQTTClient.publish("thing01/data", msg, 0)
+    myAWSIoTMQTTClient.subscribe('thing02/water', 0, custom_callback)
 except KeyboardInterrupt:
     GPIO.cleanup()
     print('exited')
