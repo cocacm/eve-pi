@@ -30,7 +30,6 @@ myMQTTClient.configureMQTTOperationTimeout(10)  # 5 sec
 # register custom callback
 def on_subscribe(client, userdata, message):
     print(message.payload)
-    return message.payload
 
 # connect and publish
 myMQTTClient.connect(100)
@@ -56,13 +55,14 @@ def rand_sensor_data():
         each = randint(1, 51)
         print('complete')
 
+rand_sensor_data()
+msg = json.dumps(payload)
+myMQTTClient.publish("thing01/data", msg, 0)
+myMQTTClient.subscribe('thing01/water', 1, on_subscribe)
+
 try:
-    rand_sensor_data()
-    print(payload)
-    msg = json.dumps(payload)
-    print(msg)
-    myMQTTClient.publish("thing01/data", msg, 0)
-    myMQTTClient.subscribe('thing01/water', 1, on_subscribe)
+    while True:
+        sleep(1)
 except KeyboardInterrupt:
     GPIO.cleanup()
     print('exited')
