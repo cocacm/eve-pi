@@ -25,12 +25,15 @@ myMQTTClient.configureCredentials(
 myMQTTClient.configureOfflinePublishQueueing(-1)  # Infinite offline Publish queueing
 myMQTTClient.configureDrainingFrequency(2)  # Draining: 2 Hz
 myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
-myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
+myMQTTClient.configureMQTTOperationTimeout(10)  # 5 sec
+
+# register custom callback
+def on_subscribe(client, userdata, message):
+    print(message.payload)
+    return message.payload
 
 # connect and publish
-myMQTTClint.connect()
-# callback function for AWS sub
-custom_callback = lambda client, userdata, message: message.payload
+myMQTTClient.connect(100)
 
 date = datetime.now(tz=pytz.utc)
 # date = date.astimezone(timezone('US/Pacific'))
@@ -59,7 +62,7 @@ try:
     msg = json.dumps(payload)
     print(msg)
     myMQTTClient.publish("thing01/data", msg, 0)
-    myAWSIoTMQTTClient.subscribe('thing02/water', 0, custom_callback)
+    myMQTTClient.subscribe('thing01/water', 1, on_subscribe)
 except KeyboardInterrupt:
     GPIO.cleanup()
     print('exited')
