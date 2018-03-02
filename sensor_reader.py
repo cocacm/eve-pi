@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import Adafruit_DHT
+import Adafruit_ADS1x15
 import json
 import pytz
 from time import sleep
@@ -15,6 +16,9 @@ button_pin = 13  # BCM 27
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(prc_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+
+# create an ADS1115 ADC (16-bit) instance
+adc = Adafruit_ADS1x15.ADS1115()
 
 # AWS IoT certificate based connection
 # MQQT client is an ID so that the MQTT broker can identify the client, using
@@ -42,7 +46,7 @@ myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 myMQTTClient.connect()
 
 date = datetime.now(tz=pytz.utc)
-date = date.astimezone(timezone('US/Pacific'))
+# date = date.astimezone(timezone('US/Pacific')) # not required anymore
 now_str = date.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 # ping device for location
@@ -54,13 +58,15 @@ payload = {
     # 'location': location,
     'temp': 0.0,
     'humid': 0.0,
-    'light': 0.0
+    'light': 0.0,
+    'moist': 0.0
     }
 
 def get_sensor_data():
 	print('getting sensor data')
 	payload['humid'], payload['temp'] = Adafruit_DHT.read_retry(Adafruit_DHT.DHT11, dht_pin)
 	payload['light'] = prc_time(prc_pin)
+    payload['moist'] = adc.read_adc(0, gain=1)
     # fahr = int(temp * (9.0 / 5.0) + 32)
 	print('complete')
 
@@ -76,11 +82,11 @@ def prc_time(pin):
 	return light
 
 try:
-    rand_sensor_data()
+    get_sensor_data()
     print(payload)
-    msg = payload.json()
+    msg = json.dumps(payload)
     print(msg)
-    myMQTTClient.Publish("thing01/data", payload, 0)
+    myMQTTClient.publish("thing01/data", msg, 0)
     sleep(5)
 except KeyboardInterrupt:
 	GPIO.cleanup()

@@ -36,7 +36,7 @@ myMQTTClient.connect(100)
 
 date = datetime.now(tz=pytz.utc)
 # date = date.astimezone(timezone('US/Pacific'))
-now_str = date.strftime('%Y-%d-%m %H:%M:%S %Z')
+now_str = date.strftime('%Y-%m-%d %H:%M:%S %Z')
 
 # ping device for location
 location = 'Valencia, Ca'
@@ -51,7 +51,7 @@ payload = {
 
 def rand_sensor_data():
     print('randomizing sensor data')
-    for each in payload:
+    for each in payload[2:]:
         each = randint(1, 51)
         print('complete')
 
